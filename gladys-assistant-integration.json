@@ -1,0 +1,538 @@
+{
+  "manifest_version": 1,
+  "type": "device",
+  "name": "YouTube Music Player",
+  "description": {
+    "en": "Control the YouTube Music desktop app from Gladys: playback, volume, queue and search.",
+    "fr": "Pilotez l'application YouTube Music depuis Gladys : lecture, volume, file d'attente et recherche.",
+    "de": "Steuere die YouTube-Music-Desktop-App aus Gladys: Wiedergabe, Lautstärke, Warteschlange, Suche.",
+    "es": "Controle la app de escritorio YouTube Music desde Gladys: reproducción, volumen, cola y búsqueda."
+  },
+  "version": "0.0.0",
+  "docker_image": "ghcr.io/prohand/gladys-youtubemusicplayer:0.0.0",
+  "gladys_version": ">=5.3.0",
+  "cover_image": "https://raw.githubusercontent.com/prohand/gladys-youtubemusicplayer/main/cover.png",
+  "categories": ["multimedia"],
+  "keywords": [
+    "youtube music",
+    "youtube",
+    "ytmusic",
+    "music player",
+    "lecteur de musique",
+    "th-ch",
+    "pear desktop",
+    "api server"
+  ],
+  "transports": ["local"],
+  "config_schema": [
+    {
+      "key": "intro",
+      "type": "section",
+      "label": {
+        "en": "Getting started",
+        "fr": "Pour commencer",
+        "de": "Erste Schritte",
+        "es": "Primeros pasos"
+      },
+      "description": {
+        "en": "This integration drives the YouTube Music desktop app (th-ch/youtube-music) installed on a computer of your network. In the app, open Plugins, turn on \"API Server\" and keep its port (26538). Then list the computers below. The first time, the app asks you to allow Gladys: click Allow on the computer.",
+        "fr": "Cette intégration pilote l'application de bureau YouTube Music (th-ch/youtube-music) installée sur un ordinateur de votre réseau. Dans l'application, ouvrez Plugins, activez « API Server » et gardez son port (26538). Listez ensuite les ordinateurs ci-dessous. La première fois, l'application demande d'autoriser Gladys : cliquez sur Autoriser sur l'ordinateur.",
+        "de": "Diese Integration steuert die YouTube-Music-Desktop-App (th-ch/youtube-music) auf einem Computer in deinem Netzwerk. Öffne in der App Plugins, aktiviere „API Server“ und behalte den Port (26538). Trage dann die Computer unten ein. Beim ersten Mal fragt die App, ob Gladys erlaubt wird: Klicke am Computer auf Erlauben.",
+        "es": "Esta integración controla la app de escritorio YouTube Music (th-ch/youtube-music) instalada en un ordenador de su red. En la app, abra Plugins, active «API Server» y mantenga su puerto (26538). Después indique los ordenadores abajo. La primera vez, la app pide permitir a Gladys: haga clic en Permitir en el ordenador."
+      },
+      "links": [
+        {
+          "url": "https://github.com/th-ch/youtube-music/releases",
+          "label": {
+            "en": "Download the YouTube Music app",
+            "fr": "Télécharger l'application YouTube Music",
+            "de": "YouTube-Music-App herunterladen",
+            "es": "Descargar la app YouTube Music"
+          }
+        },
+        {
+          "url": "https://github.com/prohand/gladys-youtubemusicplayer/blob/main/docs/en.md",
+          "label": {
+            "en": "Integration documentation",
+            "fr": "Documentation de l'intégration",
+            "de": "Dokumentation der Integration",
+            "es": "Documentación de la integración"
+          }
+        }
+      ]
+    },
+    {
+      "key": "players",
+      "type": "string",
+      "label": {
+        "en": "Players",
+        "fr": "Lecteurs",
+        "de": "Player",
+        "es": "Reproductores"
+      },
+      "description": {
+        "en": "One entry per computer running YouTube Music, separated by commas: Name=address[:port]. The port is 26538 when omitted.",
+        "fr": "Une entrée par ordinateur avec YouTube Music, séparées par des virgules : Nom=adresse[:port]. Le port vaut 26538 s'il est omis.",
+        "de": "Ein Eintrag pro Computer mit YouTube Music, durch Kommas getrennt: Name=Adresse[:Port]. Ohne Angabe ist der Port 26538.",
+        "es": "Una entrada por ordenador con YouTube Music, separadas por comas: Nombre=dirección[:puerto]. El puerto es 26538 si se omite."
+      },
+      "placeholder": {
+        "en": "Living room=192.168.1.20, Office=192.168.1.30",
+        "fr": "Salon=192.168.1.20, Bureau=192.168.1.30",
+        "de": "Wohnzimmer=192.168.1.20, Büro=192.168.1.30",
+        "es": "Salón=192.168.1.20, Oficina=192.168.1.30"
+      },
+      "required": true
+    },
+    {
+      "key": "detailed_logs",
+      "type": "boolean",
+      "label": {
+        "en": "Detailed logs",
+        "fr": "Logs détaillés",
+        "de": "Ausführliche Logs",
+        "es": "Registros detallados"
+      },
+      "description": {
+        "en": "Log every exchange with the apps (debug level), to diagnose a problem.",
+        "fr": "Journalise chaque échange avec les applications (niveau debug), pour diagnostiquer un problème.",
+        "de": "Protokolliert jeden Austausch mit den Apps (Debug-Level), um ein Problem zu untersuchen.",
+        "es": "Registra cada intercambio con las apps (nivel debug), para diagnosticar un problema."
+      },
+      "required": false,
+      "default": false
+    }
+  ],
+  "actions": [
+    {
+      "key": "test_connection",
+      "label": {
+        "en": "Test the players",
+        "fr": "Tester les lecteurs",
+        "de": "Player testen",
+        "es": "Probar los reproductores"
+      },
+      "timeout_seconds": 30
+    },
+    {
+      "key": "authorize",
+      "label": {
+        "en": "Authorize a player",
+        "fr": "Autoriser un lecteur",
+        "de": "Player autorisieren",
+        "es": "Autorizar un reproductor"
+      },
+      "timeout_seconds": 90,
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Player",
+            "fr": "Lecteur",
+            "de": "Player",
+            "es": "Reproductor"
+          },
+          "description": {
+            "en": "Then click Allow in the dialog the app shows on its computer.",
+            "fr": "Cliquez ensuite sur Autoriser dans la fenêtre que l'application affiche sur son ordinateur.",
+            "de": "Klicke dann im Dialog, den die App auf ihrem Computer zeigt, auf Erlauben.",
+            "es": "Después haga clic en Permitir en la ventana que la app muestra en su ordenador."
+          },
+          "required": true
+        }
+      ]
+    }
+  ],
+  "music": {
+    "browse": true,
+    "search": true,
+    "queue": true,
+    "append": true
+  },
+  "scene_triggers": [
+    {
+      "key": "track_changed",
+      "label": {
+        "en": "A new track starts",
+        "fr": "Un nouveau titre démarre",
+        "de": "Ein neuer Titel beginnt",
+        "es": "Empieza una nueva canción"
+      },
+      "description": {
+        "en": "A YouTube Music player starts another track.",
+        "fr": "Un lecteur YouTube Music passe à un autre titre.",
+        "de": "Ein YouTube-Music-Player beginnt einen anderen Titel.",
+        "es": "Un reproductor YouTube Music empieza otra canción."
+      },
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Player",
+            "fr": "Lecteur",
+            "de": "Player",
+            "es": "Reproductor"
+          }
+        }
+      ],
+      "variables": [
+        {
+          "key": "title",
+          "type": "string",
+          "label": { "en": "Title", "fr": "Titre", "de": "Titel", "es": "Título" }
+        },
+        {
+          "key": "artist",
+          "type": "string",
+          "label": { "en": "Artist", "fr": "Artiste", "de": "Künstler", "es": "Artista" }
+        },
+        {
+          "key": "album",
+          "type": "string",
+          "label": { "en": "Album", "fr": "Album", "de": "Album", "es": "Álbum" }
+        },
+        {
+          "key": "video_id",
+          "type": "string",
+          "label": {
+            "en": "YouTube video id",
+            "fr": "Identifiant vidéo YouTube",
+            "de": "YouTube-Video-ID",
+            "es": "Id de vídeo de YouTube"
+          }
+        }
+      ]
+    },
+    {
+      "key": "playback_changed",
+      "label": {
+        "en": "Playback starts or pauses",
+        "fr": "La lecture démarre ou se met en pause",
+        "de": "Wiedergabe startet oder pausiert",
+        "es": "La reproducción empieza o se pausa"
+      },
+      "description": {
+        "en": "A YouTube Music player switches between playing and paused.",
+        "fr": "Un lecteur YouTube Music passe de lecture à pause, ou l'inverse.",
+        "de": "Ein YouTube-Music-Player wechselt zwischen Wiedergabe und Pause.",
+        "es": "Un reproductor YouTube Music pasa de reproducción a pausa, o al revés."
+      },
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Player",
+            "fr": "Lecteur",
+            "de": "Player",
+            "es": "Reproductor"
+          }
+        },
+        {
+          "key": "state",
+          "type": "multi_select",
+          "label": {
+            "en": "New state",
+            "fr": "Nouvel état",
+            "de": "Neuer Status",
+            "es": "Nuevo estado"
+          },
+          "options": [
+            {
+              "value": "playing",
+              "label": {
+                "en": "Playing",
+                "fr": "Lecture",
+                "de": "Wiedergabe",
+                "es": "Reproduciendo"
+              }
+            },
+            {
+              "value": "paused",
+              "label": { "en": "Paused", "fr": "Pause", "de": "Pausiert", "es": "En pausa" }
+            }
+          ]
+        }
+      ],
+      "variables": [
+        {
+          "key": "state",
+          "type": "string",
+          "label": {
+            "en": "New state",
+            "fr": "Nouvel état",
+            "de": "Neuer Status",
+            "es": "Nuevo estado"
+          }
+        }
+      ]
+    },
+    {
+      "key": "player_connection_changed",
+      "label": {
+        "en": "A player goes online or offline",
+        "fr": "Un lecteur se connecte ou se déconnecte",
+        "de": "Ein Player geht online oder offline",
+        "es": "Un reproductor se conecta o desconecta"
+      },
+      "description": {
+        "en": "The YouTube Music app of a computer starts or stops answering.",
+        "fr": "L'application YouTube Music d'un ordinateur commence ou cesse de répondre.",
+        "de": "Die YouTube-Music-App eines Computers antwortet wieder oder nicht mehr.",
+        "es": "La app YouTube Music de un ordenador empieza o deja de responder."
+      },
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Player",
+            "fr": "Lecteur",
+            "de": "Player",
+            "es": "Reproductor"
+          }
+        },
+        {
+          "key": "status",
+          "type": "multi_select",
+          "label": { "en": "Status", "fr": "État", "de": "Status", "es": "Estado" },
+          "options": [
+            {
+              "value": "online",
+              "label": { "en": "Online", "fr": "En ligne", "de": "Online", "es": "En línea" }
+            },
+            {
+              "value": "offline",
+              "label": {
+                "en": "Offline",
+                "fr": "Hors ligne",
+                "de": "Offline",
+                "es": "Sin conexión"
+              }
+            }
+          ]
+        }
+      ],
+      "variables": [
+        {
+          "key": "status",
+          "type": "string",
+          "label": { "en": "Status", "fr": "État", "de": "Status", "es": "Estado" }
+        }
+      ]
+    }
+  ],
+  "scene_actions": [
+    {
+      "key": "play_search",
+      "label": {
+        "en": "Play a song by its name",
+        "fr": "Jouer un titre par son nom",
+        "de": "Titel nach Namen abspielen",
+        "es": "Reproducir una canción por su nombre"
+      },
+      "description": {
+        "en": "Search YouTube Music and play the best match.",
+        "fr": "Cherche sur YouTube Music et joue le meilleur résultat.",
+        "de": "Sucht auf YouTube Music und spielt den besten Treffer.",
+        "es": "Busca en YouTube Music y reproduce el mejor resultado."
+      },
+      "timeout_seconds": 20,
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Player",
+            "fr": "Lecteur",
+            "de": "Player",
+            "es": "Reproductor"
+          },
+          "required": true
+        },
+        {
+          "key": "query",
+          "type": "string",
+          "label": {
+            "en": "Song, artist…",
+            "fr": "Titre, artiste…",
+            "de": "Titel, Künstler…",
+            "es": "Canción, artista…"
+          },
+          "placeholder": {
+            "en": "e.g. Daft Punk Get Lucky",
+            "fr": "ex. Daft Punk Get Lucky",
+            "de": "z. B. Daft Punk Get Lucky",
+            "es": "p. ej. Daft Punk Get Lucky"
+          },
+          "required": true
+        },
+        {
+          "key": "mode",
+          "type": "select",
+          "label": { "en": "When", "fr": "Quand", "de": "Wann", "es": "Cuándo" },
+          "default": "replace",
+          "options": [
+            {
+              "value": "replace",
+              "label": { "en": "Now", "fr": "Maintenant", "de": "Jetzt", "es": "Ahora" }
+            },
+            {
+              "value": "next",
+              "label": {
+                "en": "After the current track",
+                "fr": "Après le titre en cours",
+                "de": "Nach dem aktuellen Titel",
+                "es": "Después de la canción actual"
+              }
+            },
+            {
+              "value": "append",
+              "label": {
+                "en": "At the end of the queue",
+                "fr": "À la fin de la file",
+                "de": "Am Ende der Warteschlange",
+                "es": "Al final de la cola"
+              }
+            }
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "key": "found",
+          "type": "boolean",
+          "label": {
+            "en": "Song found",
+            "fr": "Titre trouvé",
+            "de": "Titel gefunden",
+            "es": "Canción encontrada"
+          }
+        },
+        {
+          "key": "title",
+          "type": "string",
+          "label": { "en": "Title", "fr": "Titre", "de": "Titel", "es": "Título" }
+        },
+        {
+          "key": "artist",
+          "type": "string",
+          "label": { "en": "Artist", "fr": "Artiste", "de": "Künstler", "es": "Artista" }
+        }
+      ]
+    },
+    {
+      "key": "rate_track",
+      "label": {
+        "en": "Like or dislike the current track",
+        "fr": "Aimer ou ne pas aimer le titre en cours",
+        "de": "Aktuellen Titel bewerten",
+        "es": "Valorar la canción actual"
+      },
+      "description": {
+        "en": "Gives a thumbs up or down to the track playing now.",
+        "fr": "Met un pouce levé ou baissé au titre en cours.",
+        "de": "Gibt dem laufenden Titel einen Daumen hoch oder runter.",
+        "es": "Da un pulgar arriba o abajo a la canción que suena."
+      },
+      "timeout_seconds": 10,
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Player",
+            "fr": "Lecteur",
+            "de": "Player",
+            "es": "Reproductor"
+          },
+          "required": true
+        },
+        {
+          "key": "rating",
+          "type": "select",
+          "label": { "en": "Rating", "fr": "Avis", "de": "Bewertung", "es": "Valoración" },
+          "default": "like",
+          "options": [
+            {
+              "value": "like",
+              "label": { "en": "Like", "fr": "J'aime", "de": "Mag ich", "es": "Me gusta" }
+            },
+            {
+              "value": "dislike",
+              "label": {
+                "en": "Dislike",
+                "fr": "Je n'aime pas",
+                "de": "Mag ich nicht",
+                "es": "No me gusta"
+              }
+            }
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "key": "rated",
+          "type": "boolean",
+          "label": {
+            "en": "Track rated",
+            "fr": "Titre noté",
+            "de": "Titel bewertet",
+            "es": "Canción valorada"
+          }
+        },
+        {
+          "key": "title",
+          "type": "string",
+          "label": { "en": "Title", "fr": "Titre", "de": "Titel", "es": "Título" }
+        }
+      ]
+    }
+  ],
+  "widgets": [
+    {
+      "key": "now_playing",
+      "label": {
+        "en": "YouTube Music",
+        "fr": "YouTube Music",
+        "de": "YouTube Music",
+        "es": "YouTube Music"
+      },
+      "description": {
+        "en": "What a player plays, its volume, play/pause, previous, next and search.",
+        "fr": "Ce que joue un lecteur, son volume, lecture/pause, précédent, suivant, recherche.",
+        "de": "Was ein Player spielt, Lautstärke, Play/Pause, Zurück, Weiter und Suche.",
+        "es": "Lo que suena, el volumen, reproducir/pausa, anterior, siguiente y búsqueda."
+      },
+      "icon": "music",
+      "action_timeout_seconds": 20,
+      "settings": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": {
+            "en": "Player",
+            "fr": "Lecteur",
+            "de": "Player",
+            "es": "Reproductor"
+          },
+          "description": {
+            "en": "The first player when none is chosen.",
+            "fr": "Le premier lecteur si aucun n'est choisi.",
+            "de": "Der erste Player, wenn keiner gewählt ist.",
+            "es": "El primer reproductor si no se elige ninguno."
+          }
+        }
+      ]
+    }
+  ]
+}
