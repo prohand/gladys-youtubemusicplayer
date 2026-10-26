@@ -6,6 +6,8 @@ All notable changes to this integration are documented here. The format follows
 
 ## [Unreleased]
 
+## [0.0.1] - 2026-10-26
+
 ### Added
 
 - First version: control the YouTube Music desktop app (th-ch/youtube-music, API Server plugin)
@@ -21,4 +23,5 @@ All notable changes to this integration are documented here. The format follows
 - English, French, German and Spanish texts and documentation.
 - `SECURITY.md`, `CHANGELOG.md` and `CLAUDE.md`.
 
-[Unreleased]: https://github.com/prohand/gladys-youtubemusicplayer/commits/main
+[Unreleased]: https://github.com/prohand/gladys-youtubemusicplayer/compare/v0.0.1...HEAD
+[0.0.1]: https://github.com/prohand/gladys-youtubemusicplayer/releases/tag/v0.0.1

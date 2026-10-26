@@ -1,6 +1,6 @@
 {
   "name": "gladys-youtubemusicplayer",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "description": "Gladys Assistant external integration that drives the YouTube Music desktop app (th-ch/youtube-music) over its API Server.",
   "type": "module",

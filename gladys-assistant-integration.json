@@ -8,8 +8,8 @@
     "de": "Steuere die YouTube-Music-Desktop-App aus Gladys: Wiedergabe, Lautstärke, Warteschlange, Suche.",
     "es": "Controle la app de escritorio YouTube Music desde Gladys: reproducción, volumen, cola y búsqueda."
   },
-  "version": "0.0.0",
-  "docker_image": "ghcr.io/prohand/gladys-youtubemusicplayer:0.0.0",
+  "version": "0.0.1",
+  "docker_image": "ghcr.io/prohand/gladys-youtubemusicplayer:0.0.1",
   "gladys_version": ">=5.3.0",
   "cover_image": "https://raw.githubusercontent.com/prohand/gladys-youtubemusicplayer/main/cover.png",
   "categories": ["multimedia"],
@@ -183,17 +183,32 @@
         {
           "key": "title",
           "type": "string",
-          "label": { "en": "Title", "fr": "Titre", "de": "Titel", "es": "Título" }
+          "label": {
+            "en": "Title",
+            "fr": "Titre",
+            "de": "Titel",
+            "es": "Título"
+          }
         },
         {
           "key": "artist",
           "type": "string",
-          "label": { "en": "Artist", "fr": "Artiste", "de": "Künstler", "es": "Artista" }
+          "label": {
+            "en": "Artist",
+            "fr": "Artiste",
+            "de": "Künstler",
+            "es": "Artista"
+          }
         },
         {
           "key": "album",
           "type": "string",
-          "label": { "en": "Album", "fr": "Album", "de": "Album", "es": "Álbum" }
+          "label": {
+            "en": "Album",
+            "fr": "Album",
+            "de": "Album",
+            "es": "Álbum"
+          }
         },
         {
           "key": "video_id",
@@ -254,7 +269,12 @@
             },
             {
               "value": "paused",
-              "label": { "en": "Paused", "fr": "Pause", "de": "Pausiert", "es": "En pausa" }
+              "label": {
+                "en": "Paused",
+                "fr": "Pause",
+                "de": "Pausiert",
+                "es": "En pausa"
+              }
             }
           ]
         }
@@ -301,11 +321,21 @@
         {
           "key": "status",
           "type": "multi_select",
-          "label": { "en": "Status", "fr": "État", "de": "Status", "es": "Estado" },
+          "label": {
+            "en": "Status",
+            "fr": "État",
+            "de": "Status",
+            "es": "Estado"
+          },
           "options": [
             {
               "value": "online",
-              "label": { "en": "Online", "fr": "En ligne", "de": "Online", "es": "En línea" }
+              "label": {
+                "en": "Online",
+                "fr": "En ligne",
+                "de": "Online",
+                "es": "En línea"
+              }
             },
             {
               "value": "offline",
@@ -323,7 +353,12 @@
         {
           "key": "status",
           "type": "string",
-          "label": { "en": "Status", "fr": "État", "de": "Status", "es": "Estado" }
+          "label": {
+            "en": "Status",
+            "fr": "État",
+            "de": "Status",
+            "es": "Estado"
+          }
         }
       ]
     }
@@ -377,12 +412,22 @@
         {
           "key": "mode",
           "type": "select",
-          "label": { "en": "When", "fr": "Quand", "de": "Wann", "es": "Cuándo" },
+          "label": {
+            "en": "When",
+            "fr": "Quand",
+            "de": "Wann",
+            "es": "Cuándo"
+          },
           "default": "replace",
           "options": [
             {
               "value": "replace",
-              "label": { "en": "Now", "fr": "Maintenant", "de": "Jetzt", "es": "Ahora" }
+              "label": {
+                "en": "Now",
+                "fr": "Maintenant",
+                "de": "Jetzt",
+                "es": "Ahora"
+              }
             },
             {
               "value": "next",
@@ -419,12 +464,22 @@
         {
           "key": "title",
           "type": "string",
-          "label": { "en": "Title", "fr": "Titre", "de": "Titel", "es": "Título" }
+          "label": {
+            "en": "Title",
+            "fr": "Titre",
+            "de": "Titel",
+            "es": "Título"
+          }
         },
         {
           "key": "artist",
           "type": "string",
-          "label": { "en": "Artist", "fr": "Artiste", "de": "Künstler", "es": "Artista" }
+          "label": {
+            "en": "Artist",
+            "fr": "Artiste",
+            "de": "Künstler",
+            "es": "Artista"
+          }
         }
       ]
     },
@@ -459,12 +514,22 @@
         {
           "key": "rating",
           "type": "select",
-          "label": { "en": "Rating", "fr": "Avis", "de": "Bewertung", "es": "Valoración" },
+          "label": {
+            "en": "Rating",
+            "fr": "Avis",
+            "de": "Bewertung",
+            "es": "Valoración"
+          },
           "default": "like",
           "options": [
             {
               "value": "like",
-              "label": { "en": "Like", "fr": "J'aime", "de": "Mag ich", "es": "Me gusta" }
+              "label": {
+                "en": "Like",
+                "fr": "J'aime",
+                "de": "Mag ich",
+                "es": "Me gusta"
+              }
             },
             {
               "value": "dislike",
@@ -492,7 +557,12 @@
         {
           "key": "title",
           "type": "string",
-          "label": { "en": "Title", "fr": "Titre", "de": "Titel", "es": "Título" }
+          "label": {
+            "en": "Title",
+            "fr": "Titre",
+            "de": "Titel",
+            "es": "Título"
+          }
         }
       ]
     }
